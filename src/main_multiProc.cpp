@@ -1,27 +1,19 @@
-#include <stdio.h>
-#include <unistd.h>
-// #include <stdlib.h>
+#include "multiProc/createChildProc.hpp"
+#include "multiProc/execFunc.hpp"
+#include <stdlib.h>
 
 int main()
 {
-    pid_t pid;
-    printf("xxxxxxxxxxxxx\n");
-    pid = fork(); //one call, two return
-    if (pid == -1)
-    {
-        perror("fork error");
-        exit(1);
-    }
-    else if (pid == 0)
-    { //子进程
-        printf("I'm child, pid = %u, ppid = %u\n", getpid(), getppid());
-    }
-    else
-    {
-        printf("I'm parent, pid = %u, ppid = %u\n", getpid(), getppid());
-        sleep(1);
-    }
-    printf("yyyyyyyyyyyyyy\n");
-    return 0;
+    createChildProc a;
+    // a.main_crtOnce(); // 单个子进程
+    // a.main_crtMore(); // 多个子进程
+    // a.main_countMore(); // 计算进程数
+
+    exec_func b;
+    // b.main_execlp_ls(); // 执行目录下已有可执行文件 ls
+    // b.main_execlp_inheritEnv(); // 继承 shell 进程的所有环境变量
+    b.main_execl_multiProc(); // 执行自定义程序 multiProc
+
+    return EXIT_SUCCESS;
 }
 

@@ -1,4 +1,5 @@
 build
 *.exe
 .vscode
-*.bin
+bin
+
