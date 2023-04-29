@@ -12,7 +12,9 @@ int main()
     exec_func b;
     // b.main_execlp_ls(); // 执行目录下已有可执行文件 ls
     // b.main_execlp_inheritEnv(); // 继承 shell 进程的所有环境变量
-    b.main_execl_multiProc(); // 执行自定义程序 multiProc
+    // b.main_execl_multiProc(); // 执行自定义程序 multiProc
+    // b.main_wait(); // 阻塞等待回收子进程的销毁
+    b.main_waitpid(); // 非阻塞回收子进程的销毁信息
 
     return EXIT_SUCCESS;
 }
