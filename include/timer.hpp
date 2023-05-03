@@ -11,13 +11,13 @@ namespace belien {
 /**
  * @brief 计时器
  */
-class ToolsTimer {
+class Timer {
 private:
     time_point< high_clock > m_begin; // 开始时间
 
 public:
-    ToolsTimer() : m_begin(high_clock::now()) {}
-    ~ToolsTimer() {}
+    Timer() : m_begin(high_clock::now()) {}
+    ~Timer() {}
 
     /**
      * @brief  重置当前计时
