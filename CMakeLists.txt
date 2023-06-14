@@ -15,6 +15,6 @@ set(UTEST_LIB libgtest.a;libgtest_main.a;libgmock.a;libgmock_main.a)
 SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3 -Wall -fexec-charset=UTF8")
 set(EXECUTABLE_OUTPUT_PATH  ${PROJECT_SOURCE_DIR}/bin)
 set(OUT ${PROJECT_NAME}_wait)
-add_executable(${OUT} "./src/main_multiProc.cpp")
+add_executable(${OUT} "./src/main_multi_thread.cpp")
 
 # target_link_libraries(${OUT} ${UTEST_LIB})
