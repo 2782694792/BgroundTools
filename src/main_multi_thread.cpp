@@ -1,6 +1,7 @@
 #include "multi_thread/join.hpp"
 #include "multi_thread/lock.hpp"
 #include "multi_thread/mutex.hpp"
+#include "multi_thread/new_features.hpp"
 #include "multi_thread/threadpool.hpp"
 #include "multi_thread/wait_waitfor.hpp"
 
@@ -9,6 +10,19 @@ static const int MAX = 1e8;
 #include <math.h>
 #include <string>
 using namespace std;
+
+bool flag =
+    false; // 不使用 volatile
+           // 可能无法终止，在另一线程中该值可能会被缓存，不会反映在主内存中，无法读取到值变化
+// volatile bool flag = false; // 使用 volatile 可以保证该值在内存中读取
+void Volatile() {
+    int i = 0;
+    while (!flag) {
+        std::cout << "volatile: " << i << endl;
+        i++;
+    }
+}
+
 class Task {
 public:
     void process() {
@@ -21,6 +35,7 @@ public:
         }
     }
 };
+
 
 int main(int argc, char const* argv[]) {
     {
@@ -85,18 +100,65 @@ int main(int argc, char const* argv[]) {
     std::cout << std::endl;
 
     {
-        threadPool< Task > pool(6); // 6个线程，vector
-        std::string        str;
+        // threadPool< Task > pool(6); // 6个线程，vector
+        // std::string        str;
 
-        for (int i = 0; i < 6; i++)        
-        {
-            Task* tt = new Task(); // 使用智能指针
-            pool.append(
-                tt); // 不停的添加任务，任务是队列queue，因为只有固定的线程数
-            cout << "添加的任务数量：" << pool.tasks_queue.size() << endl;
-            delete tt;
-        }
+        // for (int i = 0; i < 6; i++) {
+        //     Task* tt = new Task(); // 使用智能指针
+        //     pool.append(
+        //         tt); // 不停的添加任务，任务是队列queue，因为只有固定的线程数
+        //     cout << "添加的任务数量：" << pool.tasks_queue.size() << endl;
+        //     delete tt;
+        // }
     }
+    std::cout << std::endl;
+
+    {
+        new_features d;
+        std::thread  threads[5];
+        threads[0] = std::thread(&new_features::CallOnce, &d, 12);
+        threads[0].join();
+        // for (int i = 4; i >= 0; i--) {
+        //         threads[i] = std::thread(&new_features::CallOnce, &d, i);
+        // }
+        // for (auto& th : threads) {
+        //         th.join();
+        // }
+    }
+    std::cout << std::endl;
+
+    {
+        new_features e;
+        e.Atomic();
+    }
+    std::cout << std::endl;
+
+    {
+        std::thread t(Volatile);
+        std::cin.get();
+        flag = true;
+        t.join();
+    }
+    std::cout << std::endl;
+
+    {
+        new_features f;
+        f.Promise(123);
+    }
+    std::cout << std::endl;
+
+    {
+        new_features g;
+        g.Package_task(456);
+    }
+    std::cout << std::endl;
+
+    {
+        new_features h;
+        h.Async(789);
+    }
+    std::cout << std::endl;
+
 
     return 0;
 }
