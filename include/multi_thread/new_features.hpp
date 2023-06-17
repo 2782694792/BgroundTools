@@ -46,15 +46,16 @@ public:
     }
 
     void Package_task(int value) {
-        std::packaged_task< int(int) > task(std::bind(&tempfunc, this, -99));
+        std::packaged_task< int(int) > task(std::bind(&new_features::tempfunc, this, std::placeholders::_1));
         std::future< int > fut = task.get_future();
-        std::thread(std::move(task), value).detach();
+        std::thread taskt(std::move(task), value);
+        taskt.detach();
         cout << "packaged_task: " << fut.get() << endl;
     }
 
     void Async(int value) {
         auto res =
-            std::async(std::bind(&tempfunc, this, value));
+            std::async(std::bind(&new_features::tempfunc, this, value));
         // res.wait();
         cout << "async: " << res.get() << endl; // 阻塞直到函数返回
     }

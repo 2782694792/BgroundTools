@@ -14,6 +14,7 @@ public:
 
     std::mutex              mtx;
     std::condition_variable cv;
+    bool                    ready = false;
     int                     cargo = 0;
 
     bool shipment_available() {
@@ -35,6 +36,22 @@ public:
     void read_value() {
         std::cin >> value;
         cv.notify_one();
+    }
+
+    // ----------------------------------------------------------------
+    // 虚假唤醒
+    void print_id(int id) {
+        std::unique_lock< std::mutex > lck(mtx);
+        while (!ready)
+            cv.wait(lck);
+        std::cout << "thread " << id << '\n';
+    }
+
+    void go() {
+        std::unique_lock< std::mutex > lck(mtx);
+        ready = true;
+        cv.notify_all();
+
     }
 };
 

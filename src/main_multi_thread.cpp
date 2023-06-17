@@ -3,7 +3,7 @@
 #include "multi_thread/mutex.hpp"
 #include "multi_thread/new_features.hpp"
 #include "multi_thread/threadpool.hpp"
-#include "multi_thread/wait_waitfor.hpp"
+#include "multi_thread/condition_variable.hpp"
 
 static const int MAX = 1e8;
 
@@ -100,6 +100,12 @@ int main(int argc, char const* argv[]) {
     std::cout << std::endl;
 
     {
+        thread_wait e2;
+        e2.go();
+    }
+    std::cout << std::endl;
+
+    {
         // threadPool< Task > pool(6); // 6个线程，vector
         // std::string        str;
 
@@ -158,6 +164,7 @@ int main(int argc, char const* argv[]) {
         h.Async(789);
     }
     std::cout << std::endl;
+
 
 
     return 0;
